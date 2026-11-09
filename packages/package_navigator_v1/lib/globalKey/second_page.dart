@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:demo_ft_navigate/navigate/globalKey/app_router.dart';
-import 'package:demo_ft_navigate/navigate/globalKey/HomePage.dart';
+import 'app_router.dart';
+import 'home_page.dart';
 
 // Màn hình SecondPage : có 1 Contructor nhận 1 String
 class SecondPage extends StatefulWidget {

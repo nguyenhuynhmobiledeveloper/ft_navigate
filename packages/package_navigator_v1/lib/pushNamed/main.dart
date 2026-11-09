@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:demo_ft_navigate/navigate/pushNamed/HomePage.dart';
-import 'package:demo_ft_navigate/navigate/pushNamed/SecondPage.dart';
+import 'home_page.dart';
+import 'second_page.dart';
 
 void main() {
   runApp(const PushNamed());
@@ -30,5 +30,5 @@ class PushNamed extends StatelessWidget {
 // Map danh sách các màn hình có thể chuyển qua chuyển lại trong ứng dụng : get routeList => {}
 Map<String, WidgetBuilder> get routesList => {
       "/": (context) => const HomePage(),
-      "/Screen1": (context) => const Screen1(),
+      "/Screen1": (context) => const SecondPage(),
     };

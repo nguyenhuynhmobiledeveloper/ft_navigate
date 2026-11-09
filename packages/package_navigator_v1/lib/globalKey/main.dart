@@ -1,14 +1,14 @@
 // Cách sử dụng MaterialPageRoute
 import 'package:flutter/material.dart';
-import 'package:demo_ft_navigate/navigate/globalKey/app_router.dart';
-import 'package:demo_ft_navigate/navigate/globalKey/HomePage.dart';
+import 'app_router.dart';
+import 'home_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const GlobalKeyExampleApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+class GlobalKeyExampleApp extends StatelessWidget {
+  const GlobalKeyExampleApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +23,6 @@ class MyApp extends StatelessWidget {
         // navigatorKey : Sử dụng để thay thế cho context
         // Sẽ điều hướng màn hình bằng key global này
         navigatorKey: AppRouter.navigatorKey,
-        home: HomePage());
+        home: const HomePage());
   }
 }

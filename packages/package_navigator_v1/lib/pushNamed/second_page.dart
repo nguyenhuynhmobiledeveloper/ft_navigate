@@ -33,11 +33,7 @@ class _SecondPageState extends State<SecondPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           // Column Widget  : mainAxisAlignment  là trục dọc
           children: [
-            SizedBox(
-              width: 150,
-              height: 150,
-              child: Container(height: 100, width: 100),
-            ),
+            const SizedBox(width: 150, height: 150),
 
             // widget GoToPageButton nút ấn để khi mà ấn vào sẽ navigator vào màn hình routeName: nameScreen.routeName
             ElevatedButton(
@@ -58,7 +54,7 @@ class _SecondPageState extends State<SecondPage> {
               ),
               child: const Text(
                 "Sang màn 2",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   color: Colors.white,
                 ),

@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:demo_ft_navigate/navigate/pushNamed/SecondPage.dart';
-
 // Màn hình HomePage
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -24,11 +22,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            SizedBox(
-              width: 150,
-              height: 150,
-              child: Container(height: 100, width: 100),
-            ),
+            const SizedBox(width: 150, height: 150),
             ElevatedButton(
               onPressed: () {
                 // navigate theo tên và có truyền dữ liệu sang màn hình mới
@@ -44,13 +38,13 @@ class _HomePageState extends State<HomePage> {
               ),
               child: const Text(
                 "Sang màn 1",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   color: Colors.white,
                 ),
               ),
             ),
-            Text(
+            const Text(
               "xinchafo",
               style: TextStyle(color: Colors.amber),
             ),

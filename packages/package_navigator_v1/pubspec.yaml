@@ -1,0 +1,11 @@
+name: package_navigator_v1
+description: Flutter navigation examples using routes and a navigator key.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter

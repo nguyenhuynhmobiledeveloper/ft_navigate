@@ -1,5 +1,4 @@
-import 'package:demo_ft_navigate/navigate/globalKey/app_router.dart';
-import 'package:demo_ft_navigate/navigate/globalKey/SecondPage.dart';
+import 'second_page.dart';
 
 import 'package:flutter/material.dart';
 
@@ -26,11 +25,7 @@ class _HomePageState extends State<HomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           // Column Widget  : mainAxisAlignment  là trục dọc
           children: [
-            SizedBox(
-              width: 150,
-              height: 150,
-              child: Container(height: 100, width: 100),
-            ),
+            const SizedBox(width: 150, height: 150),
             ElevatedButton(
               onPressed: () {
                 //--------CÁCH SỬ DỤNG CONTEXT-----------------
@@ -69,7 +64,7 @@ class _HomePageState extends State<HomePage> {
               ),
               child: const Text(
                 "Sang màn 1",
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   color: Colors.white,
                 ),

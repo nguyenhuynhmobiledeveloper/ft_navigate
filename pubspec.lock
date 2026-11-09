@@ -152,6 +152,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.16.0"
+  package_navigator_v1:
+    dependency: "direct main"
+    description:
+      path: "packages/package_navigator_v1"
+      relative: true
+    source: path
+    version: "1.0.0"
   path:
     dependency: transitive
     description:
