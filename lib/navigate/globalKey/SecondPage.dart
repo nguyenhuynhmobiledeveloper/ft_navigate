@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'package:demo_ft_navigate/navigate/materialPageRoute/app_router.dart';
-import 'package:demo_ft_navigate/navigate/materialPageRoute/push_pop.dart';
+import 'package:demo_ft_navigate/navigate/globalKey/app_router.dart';
+import 'package:demo_ft_navigate/navigate/globalKey/HomePage.dart';
 
-// Màn hình Screen1 : có 1 Contructor nhận 1 String
-class Screen1 extends StatefulWidget {
+// Màn hình SecondPage : có 1 Contructor nhận 1 String
+class SecondPage extends StatefulWidget {
   final String? argumentRoute;
-  const Screen1({Key? key, this.argumentRoute}) : super(key: key);
+  const SecondPage({Key? key, this.argumentRoute}) : super(key: key);
 
   @override
-  State<Screen1> createState() => _Screen1State();
+  State<SecondPage> createState() => _SecondPageState();
 }
 
-class _Screen1State extends State<Screen1> {
+class _SecondPageState extends State<SecondPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,10 +28,10 @@ class _Screen1State extends State<Screen1> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           // Column Widget  : mainAxisAlignment  là trục dọc
           children: [
-            SizedBox(
+            const SizedBox(
               width: 150,
               height: 150,
-              child: Container(height: 100, width: 100),
+              child: SizedBox(height: 100, width: 100),
             ),
 
             //widget GoToPageButton nút ấn để khi mà ấn vào sẽ navigator vào màn hình routeName: nameScreen.routeName

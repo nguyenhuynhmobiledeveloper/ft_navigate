@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:demo_ft_navigate/navigate/pushNamed/pushNamed.dart';
-import 'package:demo_ft_navigate/navigate/pushNamed/screen_pushNamed.dart';
-
+import 'package:demo_ft_navigate/navigate/pushNamed/HomePage.dart';
+import 'package:demo_ft_navigate/navigate/pushNamed/SecondPage.dart';
 
 void main() {
   runApp(const PushNamed());
@@ -19,15 +18,16 @@ class PushNamed extends StatelessWidget {
           // fontFamily: Fonts.SFPro
           // fontFamily: Fonts.regular
           ),
-      routes: routesList,
 
-      initialRoute: //Danh sách các màn hình mà có thể chuyển Navigator sang
-          "/", // Màn hình mặc định khi khởi tạo app là chạy lên
+      //Danh sách các màn hình mà có thể chuyển Navigator sang
+      routes: routesList,
+      // Màn hình mặc định khi khởi tạo app là chạy lên
+      initialRoute: "/",
     );
   }
 }
 
-//Map danh sách các màn hình có thể chuyển qua chuyển lại trong ứng dụng : get routeList => {}
+// Map danh sách các màn hình có thể chuyển qua chuyển lại trong ứng dụng : get routeList => {}
 Map<String, WidgetBuilder> get routesList => {
       "/": (context) => const HomePage(),
       "/Screen1": (context) => const Screen1(),

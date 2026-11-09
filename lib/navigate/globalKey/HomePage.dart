@@ -1,5 +1,5 @@
-import 'package:demo_ft_navigate/navigate/pushNamed/screen_pushNamed.dart';
-import 'package:demo_ft_navigate/navigate/materialPageRoute/app_router.dart';
+import 'package:demo_ft_navigate/navigate/globalKey/app_router.dart';
+import 'package:demo_ft_navigate/navigate/globalKey/SecondPage.dart';
 
 import 'package:flutter/material.dart';
 
@@ -37,28 +37,28 @@ class _HomePageState extends State<HomePage> {
                 //Cách 1 : push: Đè lên trên
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                      builder: (context) => const Screen1(
+                      builder: (context) => const SecondPage(
                             argumentRoute: "argumentRoute",
                           )),
                   // Cách để có thể truyền tham số sang màn hình tiếp theo : sử dụng constructor
                 );
 
                 // Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                //   return Screen1();
+                //   return SecondPage();
                 // }));
 
                 // // Cách 2: pushReplacement:  thay thế màn hiện tại
                 //   Navigator.of(context).pushReplacement(
                 // MaterialPageRoute(
-                //     builder: (context) => const Screen1( titleArgument:  "TitleArgument",)),
+                //     builder: (context) => const SecondPage( titleArgument:  "TitleArgument",)),
                 //     );
 
                 //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) {
-                //   return Screen1();
+                //   return SecondPage();
                 // }));
 
                 //----------- CÁCH SỬ DỤNG navigatorKey : đã tạo 1 file Class khác
-                // AppRouter.push( const Screen1());    //Cách sử dụng NavigatorKey
+                // AppRouter.push( const SecondPage());    //Cách sử dụng NavigatorKey
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.amber,

@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 
 // import 'package:demo_ft_widget/navigate/pushNamed/pushNamed.dart';
 
-class Screen1 extends StatefulWidget {
-  const Screen1({Key? key, String? argumentRoute}) : super(key: key);
+// Màn hình SecondPage
+class SecondPage extends StatefulWidget {
+  const SecondPage({Key? key, String? argumentRoute}) : super(key: key);
 
   @override
-  State<Screen1> createState() => _Screen1State();
+  State<SecondPage> createState() => _SecondPageState();
 }
 
-class _Screen1State extends State<Screen1> {
+class _SecondPageState extends State<SecondPage> {
   String? argumentRoute;
   @override
   Widget build(BuildContext context) {
-
-    // Cách Lấy params truyền từ màn khác sang 
+    // Cách Lấy params truyền từ màn khác sang
     Map<String, String>? arguments =
         ModalRoute.of(context)?.settings.arguments as Map<String, String>?;
 
     argumentRoute = arguments!["argumentRoute"];
 
     return Scaffold(
-      //Full màn hình : 1, appBar , 2 body
+      // Full màn hình : 1, appBar , 2 body
       appBar: AppBar(
         title: const Text('Screen 1'), //Tiêu đề của thanh AppBar
         centerTitle: true, // Thuộc tính có căn giữa không
@@ -39,11 +39,11 @@ class _Screen1State extends State<Screen1> {
               child: Container(height: 100, width: 100),
             ),
 
-            //widget GoToPageButton nút ấn để khi mà ấn vào sẽ navigator vào màn hình routeName: nameScreen.routeName
+            // widget GoToPageButton nút ấn để khi mà ấn vào sẽ navigator vào màn hình routeName: nameScreen.routeName
             ElevatedButton(
               onPressed: () {
-                // // Cách để trở về màn trước
-                // Navigator.of(context).pop(false);
+                // Cách để trở về màn trước
+                // Navigator.of(context).pop(false);  // Cách viết 1
                 Navigator.pushNamed(
                   context,
                   "/",

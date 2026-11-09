@@ -1,5 +1,4 @@
 // import 'dart:js';
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -18,10 +17,10 @@ class MyApp extends StatelessWidget {
       ),
       // home: const SecondPage(),
 
-      routes: routes,
       // Khai báo tất cả tuyến đường màn hình mà app có thể chạy qua
-      initialRoute: '/MyHomePage',
+      routes: routes,
       //Khai báo tuyến đường đầu tiên mà chạy qua---> màn hình đầu tiên được hiển thị
+      initialRoute: '/MyHomePage',
     );
   }
 }
@@ -31,8 +30,7 @@ Map<String, WidgetBuilder> get routes => {
       "/SecondPage": (context) => const SecondPage(),
     };
 
-// Map <String,int> a_Map = {"a" : 2   };
-
+// Màn hình HomePage
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key}) : super(key: key);
 
@@ -59,9 +57,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 //     child: Text("Sang màn 2")),
 
                 GestureDetector(
-          // Đa số 80% dùng cái này vì nó có thể tuỳ biến rất nhiều màu mè, hình thức khác nhau  : Còn các button mặc định khác thì nó chỉ có 1 hình thức cố định thôi
+          // Đa số 80% dùng cái này vì nó có thể tuỳ biến rất nhiều màu mè, hình thức khác nhau  :
+          // Còn các button mặc định khác thì nó chỉ có 1 hình thức cố định thôi
           onTap: () {
-            Navigator.of(context).pushNamed("/SecondPage");
+            MaterialPageRoute(builder: (_) => const SecondPage());
+            // Navigator.pushNamed(context, "./SecondPage"); // Cách viết 1
+            // Navigator.of(context).pushNamed("/SecondPage");   //  Cách viết 2
           },
           child: Container(child: Text("Nút bấm với GestureDetector")),
         )),
@@ -70,6 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+// Màn hình SecondPage
 class SecondPage extends StatefulWidget {
   const SecondPage({Key? key}) : super(key: key);
 
@@ -86,6 +88,7 @@ class _SecondPageState extends State<SecondPage> {
           child: Center(
         child: ElevatedButton(
           onPressed: () {
+            // MaterialPageRoute(builder: (_) => const MyHomePage());
             //  Navigator.pushNamed(context, "/MyHomePage");  // Cách viết 1
             Navigator.of(context).pushNamed("/MyHomePage"); //Cách viết 2
           },

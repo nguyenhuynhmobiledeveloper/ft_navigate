@@ -2,8 +2,9 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:demo_ft_navigate/navigate/pushNamed/screen_pushNamed.dart';
+import 'package:demo_ft_navigate/navigate/pushNamed/SecondPage.dart';
 
+// Màn hình HomePage
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -30,6 +31,7 @@ class _HomePageState extends State<HomePage> {
             ),
             ElevatedButton(
               onPressed: () {
+                // navigate theo tên và có truyền dữ liệu sang màn hình mới
                 Navigator.pushNamed(context, "/Screen1",
                     arguments: {'argumentRoute': "ArgumentRouteContent"});
               },
