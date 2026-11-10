@@ -81,13 +81,13 @@ packages:
     source: sdk
     version: "0.0.0"
   go_router:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: go_router
-      sha256: e1a30a66d734f9e498b1b6522d6a75ded28242bad2359a9158df38a1c30bcf1f
+      sha256: eff94d2a6fc79fa8b811dde79c7549808c2346037ee107a1121b4a644c745f2a
       url: "https://pub.dev"
     source: hosted
-    version: "10.2.0"
+    version: "17.0.1"
   leak_tracker:
     dependency: transitive
     description:
@@ -152,6 +152,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.16.0"
+  package_go_route:
+    dependency: "direct main"
+    description:
+      path: "packages/package_go_route"
+      relative: true
+    source: path
+    version: "1.0.0"
   package_navigator_v1:
     dependency: "direct main"
     description:
@@ -237,5 +244,5 @@ packages:
     source: hosted
     version: "14.3.1"
 sdks:
-  dart: ">=3.8.0-0 <4.0.0"
-  flutter: ">=3.18.0-18.0.pre.54"
+  dart: ">=3.9.0 <4.0.0"
+  flutter: ">=3.35.0"

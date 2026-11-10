@@ -2,6 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- Chuyển deep link cho Flutter Router thay vì tự điều hướng bằng native. -->
+	<key>FlutterDeepLinkingEnabled</key>
+	<true/>
+	<!-- Deep link demo: goroutedemo://demo/products/1/reviews -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>go-router-demo</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>goroutedemo</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

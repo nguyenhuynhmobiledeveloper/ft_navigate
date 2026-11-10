@@ -1,0 +1,25 @@
+name: package_go_route
+description: Ung dung thuc hanh go_router voi comment tieng Viet chi tiet.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: '>=3.9.0 <4.0.0'
+  flutter: '>=3.35.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Ghim phiên bản để ví dụ và API trong tài liệu luôn khớp nhau.
+  go_router: 17.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  # Chỉ dùng khi sinh lại typed_routes.g.dart; app vẫn chạy từ file đã sinh.
+  go_router_builder: 4.1.1
+  build_runner: 2.6.0
+
+flutter:
+  uses-material-design: true
