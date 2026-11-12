@@ -35,6 +35,11 @@ class _AdvancedScreenState extends State<AdvancedScreen> {
         value: widget.entryAllowed(),
         onChanged: (value) => setState(() => widget.setEntryAllowed(value)),
       ),
+      // Điều hướng trực tiếp đến một location
+      // Đặc điểm chuyển sang 1 location mới
+      // Router xây dựng lại stack theo cấu trúc route match của location đó
+      // Không đơn giản là thêm 1 màn hình lên trên màn hình hiện tại
+
       DemoAction('Thử onEnter', () => context.go('/guarded')),
       ValueListenableBuilder<List<String>>(
         valueListenable: widget.journal,

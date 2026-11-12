@@ -82,6 +82,7 @@ class TabsScreen extends StatelessWidget {
       onDestinationSelected: (index) {
         // goBranch chuyển tab mà vẫn giữ stack riêng của tab cũ.
         // Bấm lại tab đang chọn thì về route gốc của tab đó.
+        // navigationShell.goBranch(0) : Chuyển sang branch tương ứng
         shell.goBranch(index, initialLocation: index == shell.currentIndex);
       },
       destinations: const [

@@ -4,6 +4,52 @@ import 'package:go_router/go_router.dart';
 import '../routing/typed_routes.dart';
 import '../widgets/study_page.dart';
 
+/**
+ context.go()
+Điều hướng trực tiếp đến một location.
+
+Đặc điểm:
+- Chuyển sang một location mới.
+- Router xây dựng lại stack theo cấu trúc route match của location đó.
+- Không đơn giản là thêm một màn hình lên trên màn hình hiện tại.
+
+Đây là cách phù hợp khi:
+- Chuyển tab Bottom Navigation.
+- Đăng nhập thành công.
+- Logout.
+- Chuyển từ onboarding sang Home.
+- Điều hướng đến một khu vực chính khác của ứng dụng.
+
+context.push()
+Đẩy thêm một màn hình vào stack.
+
+Đây là cách phù hợp khi:
+- Mở chi tiết sản phẩm.
+- Mở chi tiết bài viết.
+- Mở trang chỉnh sửa thông tin.
+- Mở trang xem chi tiết đơn hàng.
+
+Ngoài ra, push() có thể nhận kiểu dữ liệu trả về:
+
+context.pop()
+Quay lại màn hình trước hoặc đóng route hiện tại. - có thể trả dữ liệu về màn cũ
+
+context.replace()
+Thay thế route hiện tại bằng route mới.
+Khác với go(), phương thức này thực hiện thay thế route hiện tại trong navigation history thay vì điều hướng trực tiếp theo kiểu declarative như go().
+
+
+context.pushReplacement()
+Thay thế route hiện tại bằng route mới theo kiểu imperative push.
+Login
+  |
+  | pushReplacement()
+  v
+Home
+
+Khi Back, người dùng không quay lại Login thông qua route vừa bị thay thế.
+ */
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 

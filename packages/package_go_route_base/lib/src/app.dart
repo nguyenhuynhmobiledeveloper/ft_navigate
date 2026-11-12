@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'screens.dart';
 import 'session.dart';
 
+// Hàm chính chạy app lên tương tự hàm main
 void runGoRouteBaseApp() => runApp(const GoRouteBaseApp());
 
 /// App giữ router trong State để mỗi lần build không tạo lại cây route và stack.
@@ -25,7 +26,10 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
   void initState() {
     super.initState();
     router = GoRouter(
+      // Xác định route khởi tạo. Nếu không bị chi phối bởi platform location hoặc cấu hình khác.
       initialLocation: widget.initialLocation,
+      // Có thể theo dõi qúa trình match route và navigation trên console
+      debugLogDiagnostics: true,
       // Khi session đổi, router chạy lại redirect ngay cả khi URL không đổi.
       refreshListenable: session,
       redirect: (context, state) {
@@ -52,14 +56,31 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
         return null;
       },
       routes: [
-        GoRoute(path: '/', builder: (context, state) => const HomeScreen()),
+        // GoRoute : Định nghĩa 1 đường dẫn và màn hình tương ứng
+        GoRoute(
+          // path: Đường dẫn URL
+          path: '/',
+          // name: Tên định danh route
+          // Bạn có thể đặt tên cho route để điều hướng thay vì sử dụng URL trực tiếp.
+          name: "home",
+          // buider: Tạo widget
+
+          builder: (context, state) => const HomeScreen(),
+          // pageBuilder : Tạo page tuỳ chỉnh
+          // routes: các route con
+          // parentNavigatorKey : Chỉ định Navigator cha
+
+          // redirect // Redirect riêng của route
+          // onExit : Xử lý khi rời khỏi route
+        ),
         GoRoute(path: '/pick', builder: (context, state) => const PickScreen()),
         GoRoute(
           path: '/login',
           builder: (context, state) => LoginScreen(session: session),
         ),
-        // Mỗi branch có Navigator riêng. indexedStack giữ màn hình đang mở
-        // trong tab A khi chuyển qua tab B rồi quay lại.
+        // Mỗi branch có Navigator riêng.
+        //indexedStack giữ màn hình đang mở trong tab A khi chuyển qua tab B rồi quay lại.
+        // StatefulShellRoute : Cho phép mỗi tab có một Navigator riêng
         StatefulShellRoute.indexedStack(
           builder: (context, state, shell) => TabsScreen(shell: shell),
           branches: [
@@ -69,6 +90,19 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
                   path: '/products',
                   name: 'products',
                   builder: (context, state) => ProductsScreen(
+                    // state chính là GoRouterState : Object chứa thông tin của route hiện tại
+                    // state.uri : URI hiện tại
+                    // state.pathParameters :	Các tham số nằm trong path - sử dụng khi dữ liệu nằm trong đường dẫn url
+                    // state.uri.queryParameters : Các tham số nằm trong query
+                    // state.extra : Dữ liệu truyền thêm
+                    // extra dùng để truyền một object bất kỳ đi kèm navigation.
+                    // state.matchedLocation : Đường dẫn được match
+                    // state.fullPath : Pattern của route được match
+                    // state.name : Tên route
+                    // state.pageKey : Key của Page
+                    // state.error : Thông tin lỗi nếu có
+
+                    // Query parameters là phần nằm sau dấu ? trong URL
                     sort: state.uri.queryParameters['sort'] ?? 'normal',
                   ),
                   routes: [
@@ -77,6 +111,7 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
                       path: ':id',
                       name: 'product',
                       builder: (context, state) => ProductScreen(
+                        // Lấy data từ đường dẫn url ra
                         id: state.pathParameters['id']!,
                         // extra truyền object trong bộ nhớ, không nằm trong URL.
                         // Deep link hoặc reload có thể không có extra.
@@ -97,6 +132,7 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
                 ),
               ],
             ),
+            // StateShellBranch : Thành phần bên trong của StatefulShellRoute
             StatefulShellBranch(
               routes: [
                 GoRoute(

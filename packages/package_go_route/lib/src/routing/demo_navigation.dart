@@ -321,6 +321,16 @@ class DemoNavigation {
         navigateWithoutContext: () => router.go('/inspect'),
       ),
     ),
+
+    // ShellRoute : Thành phần giúp xây dựng ứng dụng có layout chung
+    // Bạn muốn tất cả màn hình đều có chung:
+    // - Bottom Navigation.
+    // - AppBar.
+    // - Drawer.
+    // - Một số widget cố định.
+    // Nếu không có ShellRoute, bạn có thể phải lặp lại Scaffold trên nhiều màn hình.
+
+    // ShellRoute giải quyết vấn đề đó.
     ShellRoute(
       navigatorKey: workspaceKey,
       restorationScopeId: 'workspace-navigator',
