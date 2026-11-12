@@ -1,24 +1,15 @@
-# demo_ft_navigate
+# Flutter navigation examples
 
-A new Flutter project.
+Dự án thực hành điều hướng Flutter. App mặc định hiện chạy [`package_go_route_base`](packages/package_go_route_base/README.md): ví dụ `go_router` ngắn gọn, tập trung vào các API navigation thường dùng. Comment giải thích chi tiết nằm cạnh cấu hình route và từng nút điều hướng.
 
-## Getting Started
+```sh
+flutter pub get
+flutter run
+```
 
-This project is a starting point for a Flutter application.
+Các ví dụ khác trong repo:
 
-A few resources to get you started if this is your first Flutter project:
+- [`package_go_route`](packages/package_go_route/README.md): các API `go_router` nâng cao.
+- [`package_navigator_v1`](packages/package_navigator_v1/README.md): Navigator 1.0.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
-echo "# demo_ft_navigate" >> README.md
-git init
-git add README.md
-git commit -m "first commit"
-git branch -M main
-git remote add origin https://github.com/nguyenhuynhdeveloper/demo_ft_navigate.git
-git push -u origin main
+Để chạy một ví dụ khác, đổi hàm `main()` trong [`lib/main.dart`](lib/main.dart) sang hàm khởi động của package đó.
