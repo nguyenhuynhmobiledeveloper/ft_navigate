@@ -9,19 +9,30 @@ const _dark = Color(0xFF484D60);
 
 // Thứ tự ở đây là thứ tự branch của router và thứ tự nút trên thanh điều hướng.
 const _tabs = [
-  _Tab('/', 'Trang chủ', Icons.home_rounded),
-  _Tab('/history', 'Lịch sử', Icons.description_outlined),
-  _Tab('/invest', 'Đầu tư', Icons.add),
-  _Tab('/assets', 'Tài sản', Icons.account_balance_wallet_outlined),
-  _Tab('/profile', 'Cá nhân', Icons.account_circle_outlined),
+  NavigationTab('/', 'Trang chủ', Icons.home_rounded),
+  NavigationTab('/history', 'Lịch sử', Icons.description_outlined),
+  NavigationTab('/invest', 'Đầu tư', Icons.add),
+  NavigationTab('/assets', 'Tài sản', Icons.account_balance_wallet_outlined),
+  NavigationTab('/profile', 'Cá nhân', Icons.account_circle_outlined),
 ];
 
 // model của 1 thanh Tab
-class _Tab {
-  const _Tab(this.path, this.label, this.icon);
+class NavigationTab {
+  const NavigationTab(this.path, this.label, this.icon);
   final String path;
   final String label;
   final IconData icon;
+}
+
+class TabScreen extends StatelessWidget {
+  const TabScreen({super.key, required this.tab});
+
+  final NavigationTab tab;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Màn hình ${tab.label}'));
+  }
 }
 
 // widget chính của app
@@ -34,7 +45,7 @@ class GoRouteNavigationBarApp extends StatefulWidget {
 }
 
 class _GoRouteNavigationBarAppState extends State<GoRouteNavigationBarApp> {
-  //Khai báo biến GoRouter
+  // Khai báo biến GoRouter
   late final GoRouter _router = GoRouter(
     routes: [
       // Mỗi tab có Navigator riêng. Khi đổi tab rồi quay lại, branch giữ vị trí.
@@ -47,8 +58,7 @@ class _GoRouteNavigationBarAppState extends State<GoRouteNavigationBarApp> {
                 GoRoute(
                   path: tab.path,
                   // Màn hình chính của 1 tab
-                  builder: (context, state) =>
-                      Center(child: Text('Màn hình ${tab.label}')),
+                  builder: (context, state) => TabScreen(tab: tab),
                 ),
               ],
             ),
@@ -172,7 +182,7 @@ class _TabButton extends StatelessWidget {
     required this.onTap,
   });
 
-  final _Tab tab;
+  final NavigationTab tab;
   final bool selected;
   final VoidCallback onTap;
 
