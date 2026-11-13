@@ -55,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
   ]);
 }
 
+// Màn hình chọn  1 giá trị rồi pop về màn cũ
 class PickScreen extends StatelessWidget {
   const PickScreen({super.key});
 
@@ -69,6 +70,7 @@ class PickScreen extends StatelessWidget {
   ]);
 }
 
+// Widget chứa BottomNavigationBar
 class TabsScreen extends StatelessWidget {
   const TabsScreen({required this.shell, super.key});
 

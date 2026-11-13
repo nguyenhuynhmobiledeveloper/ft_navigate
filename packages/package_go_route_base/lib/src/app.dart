@@ -19,29 +19,43 @@ class GoRouteBaseApp extends StatefulWidget {
 }
 
 class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
+  // Lấy trạng thái là đã đăng nhập chưa để hiển thị route màn hình nào
   final session = DemoSession();
+
+  // Biến định nghĩa GoRouter của toàn app
   late final GoRouter router;
 
   @override
   void initState() {
     super.initState();
+    // Khai báo giá trị của GoRouter
     router = GoRouter(
       // Xác định route khởi tạo. Nếu không bị chi phối bởi platform location hoặc cấu hình khác.
       initialLocation: widget.initialLocation,
       // Có thể theo dõi qúa trình match route và navigation trên console
       debugLogDiagnostics: true,
       // Khi session đổi, router chạy lại redirect ngay cả khi URL không đổi.
+      // Biến kích hoạt chạy lại hàm redirect : khi nó thay đổi hàm redirect chạy lại để điều hướng
       refreshListenable: session,
+      // Hàm quyết định có chuyển sang URL khác trước khi hiển thị route được yêu cầu hay không
       redirect: (context, state) {
+        // path : đường dẫn mà user đang muốn tới
         final path = state.uri.path;
+        debugPrint('11111 path: $path');
+        debugPrint('11111 session.signedIn: ${session.signedIn}');
+        // Nếu trạng thái là chưa đăng nhập mà muốn vào account
         if (!session.signedIn && path == '/account') {
           // Ghi URL đích vào query để đăng nhập xong quay về đúng màn hình.
           // Uri tự mã hóa query, kể cả khi URL đích có dấu ? hoặc &.
+          // from lưu lại nơi user muốn đến --> đăng nhập xong thì tới đúng màn đó
+          debugPrint('11111 state.uri: ${state.uri.toString()}');
+
           return Uri(
             path: '/login',
             queryParameters: {'from': state.uri.toString()},
           ).toString();
         }
+
         if (session.signedIn && path == '/login') {
           final from = state.uri.queryParameters['from'];
           // Query đến từ URL ngoài app: chỉ nhận đường dẫn nội bộ hợp lệ.
@@ -73,17 +87,21 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
           // redirect // Redirect riêng của route
           // onExit : Xử lý khi rời khỏi route
         ),
+        // Màn hình pop giá trị về màn trước đó
         GoRoute(path: '/pick', builder: (context, state) => const PickScreen()),
+        // Màn hình đăng nhập
         GoRoute(
           path: '/login',
           builder: (context, state) => LoginScreen(session: session),
         ),
         // Mỗi branch có Navigator riêng.
-        //indexedStack giữ màn hình đang mở trong tab A khi chuyển qua tab B rồi quay lại.
-        // StatefulShellRoute : Cho phép mỗi tab có một Navigator riêng
+        // indexedStack: giữ màn hình đang mở trong tab A khi chuyển qua tab B rồi quay lại.
+        // StatefulShellRoute: Cho phép mỗi tab có một Navigator riêng
         StatefulShellRoute.indexedStack(
           builder: (context, state, shell) => TabsScreen(shell: shell),
+          // 2 Nhánh của Bottombar
           branches: [
+            // Nhánh sản phẩm
             StatefulShellBranch(
               routes: [
                 GoRoute(
