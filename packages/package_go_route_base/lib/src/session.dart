@@ -10,9 +10,9 @@ class DemoSession extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Hàm đăng xuất thông báo trạng thái đã đăng xuất
-  void logout() {
+  // Có thể bỏ qua thông báo nếu ngay sau đó router đã được điều hướng.
+  void logout({bool notify = true}) {
     signedIn = false;
-    notifyListeners();
+    if (notify) notifyListeners();
   }
 }

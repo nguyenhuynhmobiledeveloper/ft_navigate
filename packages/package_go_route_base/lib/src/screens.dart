@@ -17,6 +17,31 @@ class DemoPage extends StatelessWidget {
   );
 }
 
+/// Trang đầu chỉ đưa ra hai lối vào để thấy rõ tác dụng của auth redirect.
+/// Màn hình LandingScreen khi app đang ở trạng thái chưa đăng nhập
+class LandingScreen extends StatelessWidget {
+  const LandingScreen({required this.session, super.key});
+
+  final DemoSession session;
+
+  @override
+  Widget build(BuildContext context) => DemoPage('Bắt đầu', [
+    TextButton(
+      // thay đổi giá trị của  refreshListenable làm chạy redirect / -> /examples.
+      // /examples là tab đầu của app, nên bottom bar xuất hiện ngay.
+
+      onPressed: session.login,
+      child: const Text('Đăng nhập'),
+    ),
+    TextButton(
+      // Đi thẳng tới URL chi tiết khi chưa đăng nhập. redirect giữ URL này
+      // trong ?from=... và trang đăng nhập giải thích vì sao chưa xem được.
+      onPressed: () => context.goNamed('product', pathParameters: {'id': '42'}),
+      child: const Text('Xem sản phẩm demo'),
+    ),
+  ]);
+}
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -28,25 +53,26 @@ class _HomeScreenState extends State<HomeScreen> {
   String result = 'Chưa chọn';
 
   Future<void> openPicker() async {
-    // push đặt /pick lên trên Home. Future nhận giá trị từ pop ở PickScreen.
+    // push đặt /examples/pick lên trên tab Ví dụ.
+    // Future nhận giá trị từ pop ở PickScreen.
     // Bấm Back mà không chọn sẽ trả null.
-    final value = await context.push<String>('/pick');
+    final value = await context.push<String>('/examples/pick');
     if (!mounted) return; // Widget có thể đã bị hủy trong lúc chờ Future.
     setState(() => result = value ?? 'Đã hủy');
   }
 
   @override
-  Widget build(BuildContext context) => DemoPage('go_router cơ bản', [
+  Widget build(BuildContext context) => DemoPage('Ví dụ navigation', [
     Text('Kết quả từ push/pop: $result'),
     TextButton(onPressed: openPicker, child: const Text('push: chọn giá trị')),
-    // go chuyển tới URL đích theo cây route; Home không còn trong stack.
+    // go chuyển sang tab Sản phẩm theo URL đích.
     TextButton(
       onPressed: () => context.go('/products'),
       child: const Text('go: danh sách sản phẩm'),
     ),
     TextButton(
       onPressed: () => context.go('/account'),
-      child: const Text('go: tài khoản (cần đăng nhập)'),
+      child: const Text('go: tài khoản'),
     ),
     TextButton(
       onPressed: () => context.go('/khong-ton-tai'),
@@ -88,6 +114,7 @@ class TabsScreen extends StatelessWidget {
         shell.goBranch(index, initialLocation: index == shell.currentIndex);
       },
       destinations: const [
+        NavigationDestination(icon: Icon(Icons.school), label: 'Ví dụ'),
         NavigationDestination(icon: Icon(Icons.list), label: 'Sản phẩm'),
         NavigationDestination(icon: Icon(Icons.person), label: 'Tài khoản'),
       ],
@@ -132,8 +159,8 @@ class ProductsScreen extends StatelessWidget {
       child: const Text('goNamed: sản phẩm 7'),
     ),
     TextButton(
-      onPressed: () => context.go('/'),
-      child: const Text('Về trang đầu'),
+      onPressed: () => context.go('/examples'),
+      child: const Text('Về tab Ví dụ'),
     ),
   ]);
 }
@@ -179,21 +206,33 @@ class ReviewsScreen extends StatelessWidget {
   ]);
 }
 
+// Màn hình đăng nhập
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({required this.session, super.key});
+  const LoginScreen({required this.session, this.from, super.key});
 
   final DemoSession session;
+  final String? from;
 
   @override
-  Widget build(BuildContext context) => DemoPage('Đăng nhập', [
-    const Text('Demo chỉ dùng trạng thái trong bộ nhớ.'),
-    TextButton(
-      // notifyListeners làm router chạy lại redirect. Router tự đi tới
-      // URL trong ?from=..., nên ở đây không cần gọi context.go lần nữa.
-      onPressed: session.login,
-      child: const Text('Đăng nhập'),
-    ),
-  ]);
+  Widget build(BuildContext context) {
+    final segments = Uri.tryParse(from ?? '')?.pathSegments ?? [];
+    final productId = segments.length >= 2 && segments.first == 'products'
+        ? segments[1]
+        : null;
+    return DemoPage('Yêu cầu đăng nhập', [
+      Text(
+        productId == null
+            ? 'Bạn cần đăng nhập để tiếp tục.'
+            : 'Bạn cần đăng nhập để xem sản phẩm $productId.',
+      ),
+      TextButton(
+        // notifyListeners làm router chạy lại redirect. Router tự đi tới
+        // URL trong ?from=..., nên ở đây không cần gọi context.go lần nữa.
+        onPressed: session.login,
+        child: const Text('Đăng nhập'),
+      ),
+    ]);
+  }
 }
 
 class AccountScreen extends StatelessWidget {
@@ -205,8 +244,13 @@ class AccountScreen extends StatelessWidget {
   Widget build(BuildContext context) => DemoPage('Tài khoản', [
     const Text('Đã đăng nhập.'),
     TextButton(
-      // Đổi session khiến refreshListenable kích hoạt redirect /login.
-      onPressed: session.logout,
+      // Đổi trạng thái trước, rồi yêu cầu router về trang đầu một lần.
+      // Lệnh go bên dưới chạy redirect với signedIn == false.
+      onPressed: () {
+        final router = GoRouter.of(context);
+        session.logout(notify: false);
+        router.go('/'); // Trở về màn hình home chưa đăng nhập
+      },
       child: const Text('Đăng xuất'),
     ),
   ]);
@@ -221,8 +265,8 @@ class ErrorScreen extends StatelessWidget {
   Widget build(BuildContext context) => DemoPage('Không tìm thấy trang', [
     Text(message),
     TextButton(
-      onPressed: () => context.go('/'),
-      child: const Text('Về trang đầu'),
+      onPressed: () => context.go('/examples'),
+      child: const Text('Về tab Ví dụ'),
     ),
   ]);
 }
