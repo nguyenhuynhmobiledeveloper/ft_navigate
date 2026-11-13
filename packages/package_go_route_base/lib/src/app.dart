@@ -44,26 +44,26 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
         // redirect có thể được trigger khi refreshListenable thay đổi
         // Nên giá trị của path có thể là path mà user đang hướng tới - hoặc giá trị path màn hình mà đang đứng ở thời điểm hiện tại
         final path = state.uri.path;
-        debugPrint('11111 redirect state: ${state.toString()}');
-        debugPrint('11111 redirect state.uri: ${state.uri}');
-        debugPrint('11111 redirect session.signedIn: ${session.signedIn}');
+        debugPrint('redirect state: ${state.toString()}');
+        debugPrint('redirect state.uri: ${state.uri}');
+        debugPrint('redirect session.signedIn: ${session.signedIn}');
 
         // Khi ấn đăng nhập ở màn hình vào xem sản phầm nhưng yêu cầu đăng nhập -- Đăng nhập xong sẽ tới đúng màn sản phẩm đó
-        // flutter: 11111 path: /products/42  -- Điều hướng tới màn hình sản phẩm nhưng chưa đăng nhập
-        // flutter: 11111 session.signedIn: false
-        // flutter: 11111 state.uri: /products/42
+        // flutter: path: /products/42  -- Điều hướng tới màn hình sản phẩm nhưng chưa đăng nhập
+        // flutter: session.signedIn: false
+        // flutter: state.uri: /products/42
         if (!session.signedIn && path != '/' && path != '/login') {
           // Ghi URL đích vào query để đăng nhập xong quay về đúng màn hình.
           // Uri tự mã hóa query, kể cả khi URL đích có dấu ? hoặc &.
           // from lưu lại nơi user muốn đến --> đăng nhập xong thì tới đúng màn đó
-          debugPrint('11111 Chưa login path: $path');
-          debugPrint('11111 Chưa login session.signedIn: ${session.signedIn}');
-          debugPrint('11111 Chưa login state.uri: ${state.uri.toString()}');
+          debugPrint('Chưa login path: $path');
+          debugPrint('Chưa login session.signedIn: ${session.signedIn}');
+          debugPrint('Chưa login state.uri: ${state.uri.toString()}');
           debugPrint(
-            '11111 Chưa login giá trị return : ${Uri(path: '/login', queryParameters: {'from': state.uri.toString()}).toString()}', // /login?from=/products/42
+            'Chưa login giá trị return : ${Uri(path: '/login', queryParameters: {'from': state.uri.toString()}).toString()}', // /login?from=/products/42
           );
 
-          // 11111 state.uri: /products/42  // Đăng nhập xong sẽ vào đúng trang này
+          // state.uri: /products/42  // Đăng nhập xong sẽ vào đúng trang này
           //  redirect sẽ tự động điều hướng tới màn hình login - và có queryParameters cho nó
           return Uri(
             path: '/login',
@@ -74,13 +74,13 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
         // Khi bấm nút đăng nhập ở màn hình đăng nhập chỉ thay đổi signedIn làm redirect bị trigger lại
         // URL hiện tại vẫn là /login và tham số queryParameters đã được chỉ định ở trên
         if (session.signedIn && path == '/login') {
-          debugPrint('11111 Đã login path: $path');
-          debugPrint('11111 Đã login  session.signedIn: ${session.signedIn}');
+          debugPrint('Đã login path: $path');
+          debugPrint('Đã login  session.signedIn: ${session.signedIn}');
           final from = state.uri.queryParameters['from'];
           debugPrint(
-            '11111 Đã login  state.uri.queryParameters: ${state.uri.queryParameters}',
+            'Đã login  state.uri.queryParameters: ${state.uri.queryParameters}',
           );
-          debugPrint('11111 Đã login  from: $from');
+          debugPrint('Đã login  from: $from');
           // Query đến từ URL ngoài app: chỉ nhận đường dẫn nội bộ hợp lệ.
           return from != null &&
                   from.startsWith('/') &&
@@ -88,11 +88,11 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
                   Uri.tryParse(from)?.path != '/login' &&
                   Uri.tryParse(from)?.path != '/'
               ? from // /products/42
-              : '/examples';
+              : '/homeScreen';
         }
 
         // Khi state global báo đã đăng nhập rồi - và path đang đứng ở màn LandingScreen / thì vào màn ví dụ
-        if (session.signedIn && path == '/') return '/examples';
+        if (session.signedIn && path == '/') return '/homeScreen';
         // null nghĩa là tiếp tục tới route đang được yêu cầu.
         return null;
       },
@@ -104,7 +104,7 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
           path: '/',
           // name: Tên định danh route
           // Bạn có thể đặt tên cho route để điều hướng thay vì sử dụng URL trực tiếp.
-          name: "home",
+          name: "landingScreen",
           // buider: Tạo widget
 
           builder: (context, state) => LandingScreen(session: session),
@@ -125,21 +125,33 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
           ),
         ),
 
-        // Mỗi branch có Navigator riêng.
         // indexedStack: giữ màn hình đang mở trong tab A khi chuyển qua tab B rồi quay lại.
         // StatefulShellRoute: Cho phép mỗi tab có một Navigator riêng
         StatefulShellRoute.indexedStack(
           builder: (context, state, shell) => TabsScreen(shell: shell),
+          // StatefulShellRoute : Đang chứa 3 BottomTabBar - Mỗi branch có Navigator riêng.
           // 3 nhánh của bottom bar: ví dụ, sản phẩm, tài khoản.
           branches: [
             // Nhánh bottombar - ví dụ - có 1 màn hình con bên trong
             StatefulShellBranch(
               routes: [
                 GoRoute(
-                  path: '/examples',
-                  builder: (context, state) => const HomeScreen(),
+                  path: '/homeScreen',
+                  builder: (context, state) =>
+                      // state chính là GoRouterState : Object chứa thông tin của route hiện tại
+                      // state.uri : URI hiện tại
+                      // state.pathParameters :	Các tham số nằm trong path - sử dụng khi dữ liệu nằm trong đường dẫn url
+                      // state.uri.queryParameters : Các tham số nằm trong query
+                      // state.extra : Dữ liệu truyền thêm
+                      // extra dùng để truyền một object bất kỳ đi kèm navigation.
+                      // state.matchedLocation : Đường dẫn được match
+                      // state.fullPath : Pattern của route được match
+                      // state.name : Tên route
+                      // state.pageKey : Key của Page
+                      // state.error : Thông tin lỗi nếu có
+                      const HomeScreen(),
                   routes: [
-                    // Màn chọn giá trị nằm trong Navigator của tab Ví dụ.
+                    // Màn chọn giá trị nằm trong Navigator của tab homeScreen.
                     GoRoute(
                       path: 'pick',
                       builder: (context, state) => const PickScreen(),
@@ -155,18 +167,6 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
                   path: '/products',
                   name: 'products',
                   builder: (context, state) => ProductsScreen(
-                    // state chính là GoRouterState : Object chứa thông tin của route hiện tại
-                    // state.uri : URI hiện tại
-                    // state.pathParameters :	Các tham số nằm trong path - sử dụng khi dữ liệu nằm trong đường dẫn url
-                    // state.uri.queryParameters : Các tham số nằm trong query
-                    // state.extra : Dữ liệu truyền thêm
-                    // extra dùng để truyền một object bất kỳ đi kèm navigation.
-                    // state.matchedLocation : Đường dẫn được match
-                    // state.fullPath : Pattern của route được match
-                    // state.name : Tên route
-                    // state.pageKey : Key của Page
-                    // state.error : Thông tin lỗi nếu có
-
                     // Query parameters là phần nằm sau dấu ? trong URL
                     sort: state.uri.queryParameters['sort'] ?? 'normal',
                   ),
