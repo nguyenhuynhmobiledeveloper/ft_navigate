@@ -166,6 +166,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  package_go_route_navigation_bar:
+    dependency: "direct main"
+    description:
+      path: "packages/package_go_route_NavigationBar"
+      relative: true
+    source: path
+    version: "1.0.0"
   package_navigator_v1:
     dependency: "direct main"
     description:

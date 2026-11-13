@@ -37,6 +37,8 @@ dependencies:
     path: packages/package_go_route
   package_go_route_base:
     path: packages/package_go_route_base
+  package_go_route_navigation_bar:
+    path: packages/package_go_route_NavigationBar
   package_navigator_v1:
     path: packages/package_navigator_v1
 
