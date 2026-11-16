@@ -6,6 +6,7 @@ void main() {
   testWidgets('năm tab chuyển màn hình bằng go_router', (tester) async {
     await tester.pumpWidget(const GoRouteNavigationBarApp());
     await tester.pumpAndSettle();
+    expect(find.byType(NavigationBar), findsOneWidget);
     expect(find.text('Màn hình Trang chủ'), findsOneWidget);
 
     for (final entry in <String, String>{
@@ -21,15 +22,21 @@ void main() {
 
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
+    expect(
+      tester.widget<NavigationBar>(find.byType(NavigationBar)).selectedIndex,
+      2,
+    );
     expect(find.text('Màn hình Đầu tư'), findsOneWidget);
     expect(find.text('Tài sản'), findsOneWidget); // Vẫn có bottom bar.
     await tester.tap(find.text('Chi tiết'));
     await tester.pumpAndSettle();
     expect(find.text('Màn hình Chi tiết Đầu tư'), findsOneWidget);
+    expect(find.byType(NavigationBar), findsNothing);
     expect(find.text('Tài sản'), findsNothing); // Chi tiết che bottom bar.
     await tester.tap(find.byType(BackButton));
     await tester.pumpAndSettle();
     expect(find.text('Màn hình Đầu tư'), findsOneWidget);
+    expect(find.byType(NavigationBar), findsOneWidget);
     expect(find.text('Tài sản'), findsOneWidget); // Bottom bar hiện lại.
   });
 }

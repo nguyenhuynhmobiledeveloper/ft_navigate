@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-void runGoRouteNavigationBarApp() => runApp(const GoRouteNavigationBarApp());
+void runGoRouteCustomBottomBarApp() =>
+    runApp(const GoRouteCustomBottomBarApp());
 
 const _background = Color(0xFFF6F7F9);
 const _blue = Color(0xFF0046C8);
@@ -72,15 +73,15 @@ class InvestDetailScreen extends StatelessWidget {
 }
 
 // widget chính của app - chỉ chứa cấu hình điều hướng - không có view trực tiếp
-class GoRouteNavigationBarApp extends StatefulWidget {
-  const GoRouteNavigationBarApp({super.key});
+class GoRouteCustomBottomBarApp extends StatefulWidget {
+  const GoRouteCustomBottomBarApp({super.key});
 
   @override
-  State<GoRouteNavigationBarApp> createState() =>
-      _GoRouteNavigationBarAppState();
+  State<GoRouteCustomBottomBarApp> createState() =>
+      _GoRouteCustomBottomBarAppState();
 }
 
-class _GoRouteNavigationBarAppState extends State<GoRouteNavigationBarApp> {
+class _GoRouteCustomBottomBarAppState extends State<GoRouteCustomBottomBarApp> {
   final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
   // Khai báo biến GoRouter

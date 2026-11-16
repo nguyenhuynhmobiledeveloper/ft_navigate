@@ -8,4 +8,5 @@ import 'package:package_go_route_navigation_bar/package_go_route_navigation_bar.
 // void main() => runPackageNavigatorV1App();
 // void main() => runPackageGoRouteApp();
 // void main() => runGoRouteBaseApp();
+// void main() => runGoRouteCustomBottomBarApp();
 void main() => runGoRouteNavigationBarApp();
