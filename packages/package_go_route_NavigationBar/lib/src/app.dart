@@ -24,8 +24,9 @@ class NavigationTab {
   final IconData icon;
 }
 
-class TabScreen extends StatelessWidget {
-  const TabScreen({super.key, required this.tab});
+// Phần thân ruột của màn hình : body nội dung nằm phía trên bottomTabBar
+class TabBodyScreen extends StatelessWidget {
+  const TabBodyScreen({super.key, required this.tab});
 
   final NavigationTab tab;
 
@@ -35,7 +36,42 @@ class TabScreen extends StatelessWidget {
   }
 }
 
-// widget chính của app
+// Tab Đầu tư vẫn nằm trong shell nên luôn thấy bottom tab bar.
+class InvestTabScreen extends StatelessWidget {
+  const InvestTabScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) => Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        const Text('Màn hình Đầu tư'),
+        ElevatedButton(
+          // push route con lên root Navigator để trang chi tiết che shell.
+          onPressed: () => context.push('/invest/details'),
+          child: const Text('Chi tiết'),
+        ),
+      ],
+    ),
+  );
+}
+
+class InvestDetailScreen extends StatelessWidget {
+  const InvestDetailScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    backgroundColor: _background,
+    appBar: AppBar(
+      backgroundColor: _background,
+      leading: BackButton(onPressed: () => context.pop()),
+      title: const Text('Chi tiết Đầu tư'),
+    ),
+    body: const Center(child: Text('Màn hình Chi tiết Đầu tư')),
+  );
+}
+
+// widget chính của app - chỉ chứa cấu hình điều hướng - không có view trực tiếp
 class GoRouteNavigationBarApp extends StatefulWidget {
   const GoRouteNavigationBarApp({super.key});
 
@@ -45,20 +81,39 @@ class GoRouteNavigationBarApp extends StatefulWidget {
 }
 
 class _GoRouteNavigationBarAppState extends State<GoRouteNavigationBarApp> {
+  final _rootNavigatorKey = GlobalKey<NavigatorState>();
+
   // Khai báo biến GoRouter
   late final GoRouter _router = GoRouter(
+    // Đây là navigator gốc - để điều khiển 1 vài màn hình không hiển thị bottom tab bar
+    // mà hiển thị đè lên trên bottom tab bar
+    navigatorKey: _rootNavigatorKey,
     routes: [
-      // Mỗi tab có Navigator riêng. Khi đổi tab rồi quay lại, branch giữ vị trí.
+      // Cả 5 tab đều nằm trong shell, mỗi tab có Navigator riêng.
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => _TabsScaffold(shell: shell),
+
+        // Các nhánh navigate trong StatefulShellRoute
         branches: [
           for (final tab in _tabs)
             StatefulShellBranch(
               routes: [
                 GoRoute(
                   path: tab.path,
-                  // Màn hình chính của 1 tab
-                  builder: (context, state) => TabScreen(tab: tab),
+                  // Màn hình chính của 1 tab luôn nằm trên bottom tab bar.
+                  builder: (context, state) => tab.path == '/invest'
+                      ? const InvestTabScreen()
+                      : TabBodyScreen(tab: tab),
+                  routes: [
+                    if (tab.path == '/invest')
+                      GoRoute(
+                        path: 'details',
+                        // Trang con thuộc nhánh Đầu tư nhưng hiển thị trên
+                        // root Navigator, phủ cả shell và bottom tab bar.
+                        parentNavigatorKey: _rootNavigatorKey,
+                        builder: (context, state) => const InvestDetailScreen(),
+                      ),
+                  ],
                 ),
               ],
             ),
@@ -80,6 +135,7 @@ class _GoRouteNavigationBarAppState extends State<GoRouteNavigationBarApp> {
   );
 }
 
+// Toàn bộ view của 1 bottom tab bar
 class _TabsScaffold extends StatelessWidget {
   const _TabsScaffold({required this.shell});
 
@@ -88,11 +144,11 @@ class _TabsScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
     backgroundColor: _background,
-    body: shell,
+    body: shell, // shell ở đây chính là phần trên của 1 bottom tab bar
     // Tô nền ở NGOÀI SafeArea để màu trắng phủ cả vùng home indicator iPhone.
     bottomNavigationBar: ColoredBox(
-      // color: Colors.white,
-      color: Colors.red,
+      color: Colors.white,
+      // color: Colors.red,
       child: SafeArea(
         top: false,
         child: SizedBox(
@@ -132,7 +188,7 @@ class _TabsScaffold extends StatelessWidget {
                   ),
                 ),
               ),
-              // Nút tròn nằm đè lên mép trên; vùng chạm vẫn gọi goBranch(2).
+              // Nút tròn chuyển đến nhánh Đầu tư trong shell.
               Positioned(
                 top: 0,
                 left: 0,

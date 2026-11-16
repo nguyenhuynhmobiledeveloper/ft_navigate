@@ -130,7 +130,7 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
         StatefulShellRoute.indexedStack(
           builder: (context, state, shell) => TabsScreen(shell: shell),
           // StatefulShellRoute : Đang chứa 3 BottomTabBar - Mỗi branch có Navigator riêng.
-          // 3 nhánh của bottom bar: ví dụ, sản phẩm, tài khoản.
+          // Các nhánh navigate trong StatefulShellRoute -  3 nhánh của bottom bar: ví dụ, sản phẩm, tài khoản.
           branches: [
             // Nhánh bottombar - ví dụ - có 1 màn hình con bên trong
             StatefulShellBranch(
@@ -154,6 +154,7 @@ class _GoRouteBaseAppState extends State<GoRouteBaseApp> {
                     // Màn chọn giá trị nằm trong Navigator của tab homeScreen.
                     GoRoute(
                       path: 'pick',
+                      // Phần nội dung chính của màn hình - sẽ nằm trên Bottom tab bar
                       builder: (context, state) => const PickScreen(),
                     ),
                   ],
