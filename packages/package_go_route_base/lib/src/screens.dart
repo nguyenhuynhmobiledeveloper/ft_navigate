@@ -113,7 +113,8 @@ class TabsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    body: shell, // Đặt nội dung của branch đang chọn vào phần thân
+    // Đặt nội dung của branch đang chọn vào phần thân ở trên bottom bar
+    body: shell,
     // Giữ thanh chọn tab bên dưới nội dung - giao diện sẽ được vẽ bằng NaigationBar
     bottomNavigationBar: NavigationBar(
       // index của branch đang họat động trong danh sách branches

@@ -6,8 +6,8 @@ void runGoRouteNavigationBarApp() => runApp(const GoRouteNavigationBarApp());
 const _background = Color(0xFFF6F7F9);
 const _blue = Color(0xFF0241C4);
 const _dark = Color(0xFF474A57);
-const _barHeight = 80.0;
-const _barOverlap = 24.0;
+const _barHeight = 80.0; // Chiều cao của Bottom
+const _barOverlap = 24.0; // Chiều cao overlap của icon đầu tư
 
 // Thứ tự ở đây là thứ tự branch của router và thứ tự nút trên thanh điều hướng.
 const _tabs = [
@@ -74,7 +74,7 @@ class InvestDetailScreen extends StatelessWidget {
   );
 }
 
-// widget chính của app - chỉ chứa cấu hình điều hướng - không có view trực tiếp
+// Widget chính của app - chỉ chứa cấu hình điều hướng - không có view trực tiếp
 class GoRouteNavigationBarApp extends StatefulWidget {
   const GoRouteNavigationBarApp({super.key});
 
@@ -90,6 +90,7 @@ class _GoRouteNavigationBarAppState extends State<GoRouteNavigationBarApp> {
   late final GoRouter _router = GoRouter(
     // Đây là navigator gốc - để điều khiển 1 vài màn hình không hiển thị bottom tab bar
     // mà hiển thị đè lên trên bottom tab bar
+    // initialLocation: "/invest",
     navigatorKey: _rootNavigatorKey,
     routes: [
       // Cả 5 tab đều nằm trong shell, mỗi tab có Navigator riêng.
@@ -98,21 +99,23 @@ class _GoRouteNavigationBarAppState extends State<GoRouteNavigationBarApp> {
 
         // Các nhánh navigate trong StatefulShellRoute
         branches: [
+          // Vòng lặp để tạo các item StatefullShellBranch nằm trong nhánh
           for (final tab in _tabs)
             StatefulShellBranch(
               routes: [
                 GoRoute(
                   path: tab.path,
                   // Màn hình chính của 1 tab luôn nằm trên bottom tab bar.
+                  // Riêng màn đầu tư có màn riêng
                   builder: (context, state) => tab.path == '/invest'
                       ? const InvestTabScreen()
                       : TabBodyScreen(tab: tab),
                   routes: [
+                    // Riêng màn đầu tư có routes con bên trong
                     if (tab.path == '/invest')
                       GoRoute(
                         path: 'details',
-                        // Trang con thuộc nhánh Đầu tư nhưng hiển thị trên
-                        // root Navigator, phủ cả shell và bottom tab bar.
+                        // Trang con thuộc nhánh Đầu tư nhưng hiển thị trên root Navigator, phủ cả shell và bottom tab bar.
                         parentNavigatorKey: _rootNavigatorKey,
                         builder: (context, state) => const InvestDetailScreen(),
                       ),
@@ -139,8 +142,7 @@ class _GoRouteNavigationBarAppState extends State<GoRouteNavigationBarApp> {
   );
 }
 
-// NavigationBar vẫn quản lý nhãn, vùng chạm và trạng thái của cả 5 tab.
-// Stack chỉ vẽ nền lõm và nút + nổi theo đúng hình tham chiếu.
+// Chính là phần build của  StatefulShellRoute.indexedStack : chứa cả body trên bottom bar + bottom bar
 class _TabsScaffold extends StatelessWidget {
   const _TabsScaffold({required this.shell});
 
@@ -153,16 +155,25 @@ class _TabsScaffold extends StatelessWidget {
     );
     return (Scaffold(
       backgroundColor: _background,
-      body: shell,
+      // shell chứa Navigator của các tab + hiển thị màn hình do GoRoute.builder tạo ra
+      // shell quản lý các Navigator và màn hình của từng tab
+      body: shell, // Phần nội dung thân của màn hình phía trên bottom bar
+      // Scaffold.bottomNavigationBar : là vị trí để hiển thị Bottom bar
+      // bản thân bottomNAvigationBar không quản lý route
       bottomNavigationBar: SizedBox(
         // NavigationBar cao 80; chính nó cộng SafeArea của iPhone vào phía dưới.
         // Thêm 24 ở trên để nút + nhô lên khỏi mép trắng.
         height: _barOverlap + _barHeight + MediaQuery.paddingOf(context).bottom,
+        // Stack chỉ vẽ nền lõm và nút + nổi
+
         child: Stack(
           children: [
-            const Positioned.fill(child: ColoredBox(color: Colors.red)),
+            // Phần diện tích trên từ đỉnh button tròn
+            const Positioned.fill(child: ColoredBox(color: _background)),
+            // Phần diện tích uống cong xuống tới hết
             Positioned(
-              top: _barOverlap + 0,
+              top: _barOverlap + 0, // Hạ thấp xuống 1 khoảng _barOverlap
+              // top: 0,
               left: 0,
               right: 0,
               bottom: 0,
@@ -171,6 +182,8 @@ class _TabsScaffold extends StatelessWidget {
                 child: const ColoredBox(color: Colors.white),
               ),
             ),
+            // NavigationBar quản lý nhãn, vùng chạm và trạng thái của cả 5 tab.
+            // Chỉ vẽ lên 4 icon của 4 tab bên cạnh còn bỏ trống tab ở chính giữa để position vẽ lên
             Positioned(
               top: _barOverlap,
               left: 0,
@@ -178,13 +191,15 @@ class _TabsScaffold extends StatelessWidget {
               bottom: 0,
               child: _navigationBar(),
             ),
+            // Button xanh ở giữa Bottom bar
             Positioned(
               top: 0,
               left: 0,
               right: 0,
               child: Center(
                 child: Material(
-                  type: MaterialType.transparency,
+                  // type: MaterialType.transparency,
+
                   child: InkWell(
                     customBorder: const CircleBorder(),
                     onTap: () => shell.goBranch(
@@ -203,16 +218,18 @@ class _TabsScaffold extends StatelessWidget {
   }
 
   Widget _navigationBar() => NavigationBar(
-    // key: Key?; mặc định null. ValueKey nhận giá trị ổn định, ObjectKey nhận
-    // object, UniqueKey luôn mới, GlobalKey giữ định danh duy nhất trong cây.
+    // key: Key?; mặc định null.
+    // ValueKey nhận giá trị ổn định, ObjectKey nhận  object, UniqueKey luôn mới, GlobalKey giữ định danh duy nhất trong cây.
     // Chỉ cần đặt khi muốn nhận diện hoặc điều khiển riêng widget này.
     // key: const ValueKey('main-navigation-bar'),
 
-    // animationDuration: Duration?; mặc định 500 ms. Duration.zero đổi ngay;
+    // animationDuration: Duration?; mặc định 500 ms.
+    // Duration.zero đổi ngay;
     // Duration dương là thời gian chuyển từ chưa chọn sang đã chọn và ngược lại.
     // animationDuration: const Duration(milliseconds: 500),
 
-    // selectedIndex: int; mặc định 0, hợp lệ từ 0 đến destinations.length-1.
+    // selectedIndex: int; mặc định 0,
+    // hợp lệ từ 0 đến destinations.length-1.
     // Ở đây chỉ số tab do go_router quản lý, không lưu thêm state riêng.
     selectedIndex: shell.currentIndex,
 
@@ -325,7 +342,7 @@ class _TabsScaffold extends StatelessWidget {
   );
 }
 
-// Hình nút + nổi trên thanh; ô Đầu tư trong NavigationBar giữ nhãn và tab.
+// Hình nút + nổi trên thanh bottom bar; ô Đầu tư trong NavigationBar giữ nhãn và tab.
 class _InvestIcon extends StatelessWidget {
   const _InvestIcon();
 
@@ -337,6 +354,14 @@ class _InvestIcon extends StatelessWidget {
       color: _blue,
       shape: BoxShape.circle,
       border: Border.all(color: const Color(0xFFE6ECF8), width: 4),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.2),
+          blurRadius: 5,
+          spreadRadius: 0,
+          offset: const Offset(0, 0),
+        ),
+      ],
     ),
     child: const Icon(Icons.add, color: Colors.white, size: 30),
   );
